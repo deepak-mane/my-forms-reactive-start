@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -12,6 +12,8 @@ export class AppComponent implements OnInit{
   signupForm: FormGroup;
   forbiddenUsernames = ['Chris', 'Anna'];
 
+  constructor(private formBuilder:FormBuilder) {}
+
   ngOnInit() {
     //this javascript form creates basic form
     this.signupForm = new FormGroup({
@@ -22,11 +24,31 @@ export class AppComponent implements OnInit{
        'gender': new FormControl('male'),
        'hobbies': new FormArray([])
     });
+    // this.signupForm.valueChanges.subscribe(
+    //   (value) => console.log(value)
+    // );
+    this.signupForm.statusChanges.subscribe(
+      (status) => console.log(status)
+    );
+    this.signupForm.setValue({
+      'userData': {
+        'username': 'Max',
+        'email': 'max@test.com'
+      },
+      'gender': 'male',
+      'hobbies': []
+    });
+    this.signupForm.patchValue({
+      'userData': {
+        'username': 'Anna',
+      },
+    });
   }
 
 
   onSubmit() {
     console.log(this.signupForm);
+    this.signupForm.reset();
   }
 
 
